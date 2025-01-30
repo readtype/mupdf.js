@@ -1,0 +1,3 @@
+build-with-ext.sh merge=ours
+sync-upstream.sh merge=ours
+FORK-README.md merge=ours
