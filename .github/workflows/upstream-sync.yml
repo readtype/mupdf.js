@@ -1,0 +1,41 @@
+name: Sync Upstream Daily
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Daily at 00:00 UTC
+  workflow_dispatch:     # Optional manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for rebasing
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "dirathea@users.noreply.github.com"
+          git config --global user.name "dirathea"
+          # Enable the 'ours' merge driver for .gitattributes rules
+          git config --global merge.ours.driver true
+
+      - name: Add Upstream Remote
+        run: |
+          git remote add upstream $UPSTREAM_REPO_URL
+        env:
+          UPSTREAM_REPO_URL: "https://github.com/ArtifexSoftware/mupdf.js.git"
+
+      - name: Fetch Upstream Changes
+        run: git fetch upstream
+
+      - name: Rebase Onto Upstream
+        run: |
+          set -ex
+          ./sync-upstream.sh
+
+      - name: Push Changes
+        run: git push origin main --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
