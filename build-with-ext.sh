@@ -15,6 +15,7 @@ jq \
   '.name = $name | .repository.url = $repo' \
   package.json.bak > package.json
 
+echo "Updating ts files"
 # replace self import to match updated module
 find ./src -type f \( -name "*.ts" \) -exec sed -i.bak \
   -e 's/from "mupdf"/from "@readtype\/mupdf"/g' \
@@ -25,6 +26,7 @@ cp build.sh build.sh.bak
 
 chmod +x build.sh
 
+echo "Updating build.sh files"
 sed -i '' \
  -e "s|^EMSDK_DIR=.*|EMSDK_DIR=${EMSDK_DIR}|" \
  -e 's/^MUPDF_OPTS=.*/MUPDF_OPTS="-Os -DTOFU -DTOFU_CJK_EXT -DFZ_ENABLE_XPS=0 -DFZ_ENABLE_SVG=0 -DFZ_ENABLE_CBZ=0 -DFZ_ENABLE_IMG=0 -DFZ_ENABLE_HTML=1 -DFZ_ENABLE_EPUB=1 -DFZ_ENABLE_JS=0 -DFZ_ENABLE_OCR_OUTPUT=0 -DFZ_ENABLE_DOCX_OUTPUT=0 -DFZ_ENABLE_ODT_OUTPUT=0"/' \
