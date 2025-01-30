@@ -32,6 +32,7 @@ build.sh
 
 # ./build.sh "$@"
 
+npm install
 npm publish
 
 # revert the changes
