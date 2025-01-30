@@ -26,8 +26,14 @@ cp build.sh build.sh.bak
 
 chmod +x build.sh
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  SED_PARAMS="-i ''"
+else
+  SED_PARAMS="-i"
+fi
+
 echo "Updating build.sh files"
-sed -i '' \
+sed $SED_PARAMS \
  -e "s|^EMSDK_DIR=.*|EMSDK_DIR=${EMSDK_DIR}|" \
  -e 's/^MUPDF_OPTS=.*/MUPDF_OPTS="-Os -DTOFU -DTOFU_CJK_EXT -DFZ_ENABLE_XPS=0 -DFZ_ENABLE_SVG=0 -DFZ_ENABLE_CBZ=0 -DFZ_ENABLE_IMG=0 -DFZ_ENABLE_HTML=1 -DFZ_ENABLE_EPUB=1 -DFZ_ENABLE_JS=0 -DFZ_ENABLE_OCR_OUTPUT=0 -DFZ_ENABLE_DOCX_OUTPUT=0 -DFZ_ENABLE_ODT_OUTPUT=0"/' \
 build.sh
